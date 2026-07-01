@@ -66,7 +66,10 @@ async function compressImage(file) {
   const canvas = document.createElement("canvas");
   canvas.width = Math.round(bitmap.width * ratio);
   canvas.height = Math.round(bitmap.height * ratio);
-  canvas.getContext("2d").drawImage(bitmap, 0, 0, canvas.width, canvas.height);
+  const ctx = canvas.getContext("2d");
+  ctx.fillStyle = "#fff"; // fond blanc : un PNG transparent deviendrait noir en JPEG
+  ctx.fillRect(0, 0, canvas.width, canvas.height);
+  ctx.drawImage(bitmap, 0, 0, canvas.width, canvas.height);
   const blob = await new Promise((res) => canvas.toBlob(res, "image/jpeg", 0.82));
   return blob || file;
 }

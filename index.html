@@ -1,0 +1,138 @@
+<!doctype html>
+<html lang="fr">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover" />
+  <title>Les 50 ans de Candice 🎉</title>
+  <meta name="description" content="Pour fêter les 50 ans de Candice : participez à la cagnotte pour notre coin de paradis en Ardèche et laissez une photo ou un petit mot sur le mur des souvenirs." />
+  <meta name="theme-color" content="#FBF5EA" />
+  <link rel="icon" type="image/png" href="assets/favicon.png" />
+  <link rel="apple-touch-icon" href="assets/apple-touch-icon.png" />
+  <meta property="og:title" content="Les 50 ans de Candice 🎉" />
+  <meta property="og:description" content="Une cagnotte pour l'Ardèche et un mur de souvenirs, pour fêter ses 50 ans comme il se doit." />
+  <meta property="og:image" content="assets/illu-50.png" />
+  <link rel="preload" href="fonts/ReenieBeanie-Regular.ttf" as="font" type="font/ttf" crossorigin />
+  <link rel="preload" href="fonts/Lora-normal.woff2" as="font" type="font/woff2" crossorigin />
+  <link rel="stylesheet" href="css/style.css" />
+</head>
+<body id="top">
+
+  <header class="nav" id="nav">
+    <a class="nav__logo" href="#top" id="logoLink" aria-label="Revenir en haut de page">
+      <span class="nav__logo-slot" id="logoSlot">
+        <img class="nav__logo-img" src="assets/illu-50-small.png" alt="" />
+      </span>
+      <span class="nav__logo-text hand">de Candice</span>
+    </a>
+    <button class="burger" id="burger" aria-label="Ouvrir le menu" aria-expanded="false" aria-controls="menu">
+      <span></span><span></span><span></span>
+    </button>
+  </header>
+
+  <nav class="menu" id="menu" aria-hidden="true">
+    <ul class="menu__list">
+      <li style="--i:0"><a class="menu__link" href="#cagnotte">La cagnotte</a></li>
+      <li style="--i:1"><a class="menu__link" href="#souvenirs">Le mur des souvenirs</a></li>
+      <li style="--i:2">
+        <a class="btn btn--cta menu__cta" href="https://tribee.fr/participations/472MZR52P78SYRA4M5X1WWDE6R" target="_blank" rel="noopener">
+          Je participe&nbsp;🎁
+        </a>
+      </li>
+    </ul>
+  </nav>
+
+  <!-- L'illu vit dans un calque fixe : c'est elle qui « vole » vers la nav au scroll -->
+  <div class="hero-fixed" id="heroFixed" aria-hidden="false">
+    <div class="hero-illu" id="heroIllu">
+      <img id="heroImg" src="assets/illu-50.png" alt="Un grand 50 illustré, rempli de paysages : mer, montagne, cascades et canyons" />
+      <p class="hero-illu__signature hand" id="heroSignature">de Candice</p>
+    </div>
+  </div>
+
+  <main>
+    <section class="hero" aria-label="Les 50 ans de Candice">
+      <div class="hero__spacer"></div>
+      <a class="hero__scroll" href="#cagnotte" id="scrollCue" aria-label="Descendre vers la cagnotte">
+        <span class="hand">c'est par ici</span>
+        <svg viewBox="0 0 24 24" width="26" height="26" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+          <path d="M12 4v16M5 13l7 7 7-7" />
+        </svg>
+      </a>
+    </section>
+
+    <div class="wave wave--paper-deep" aria-hidden="true">
+      <svg viewBox="0 0 900 40" preserveAspectRatio="none"><path d="M0,24 C120,44 240,4 380,20 C520,36 640,6 780,18 C840,23 880,28 900,24 L900,40 L0,40 Z" /></svg>
+    </div>
+
+    <section class="section section--cagnotte" id="cagnotte">
+      <div class="section__inner">
+        <p class="kicker hand">une cagnotte, pour quoi faire ?</p>
+        <h2 class="section__title">À quoi sert cette <span class="squiggle">cagnotte</span>&nbsp;?</h2>
+        <p>Direction l’Ardèche&nbsp;! 🏡 Cette cagnotte va servir à financer des travaux dans notre petit coin de paradis ardéchois. Pour vous donner une idée du projet, on a généré quelques photos par IA (spoiler&nbsp;: c’est loin d’être parfait, y’a de vrais artistes dans la famille, mais ça donne une idée de l’esprit qu’on veut donner au lieu&nbsp;! 😅).</p>
+        <p>Chaque petite participation nous rapproche un peu plus de la truelle et du pinceau. Merci pour votre soutien, on a hâte de vous montrer le résultat final (en vrai, cette fois)&nbsp;!</p>
+
+        <figure class="polaroid">
+          <span class="polaroid__tape" aria-hidden="true"></span>
+          <img src="assets/projection.jpg" alt="Projection du projet : maison en pierre ardéchoise avec terrasse en bois, murets fleuris et allée en gravier (images générées par IA)" loading="lazy" />
+          <figcaption class="hand">le petit coin de paradis (version IA 😅)</figcaption>
+        </figure>
+
+        <a class="btn btn--cta" href="https://tribee.fr/participations/472MZR52P78SYRA4M5X1WWDE6R" target="_blank" rel="noopener">
+          Je participe à la cagnotte&nbsp;🎁
+        </a>
+        <p class="cagnotte__hint hand">via Tribee — paiement sécurisé, promis&nbsp;!</p>
+      </div>
+    </section>
+
+    <div class="wave wave--paper" aria-hidden="true">
+      <svg viewBox="0 0 900 40" preserveAspectRatio="none"><path d="M0,24 C120,44 240,4 380,20 C520,36 640,6 780,18 C840,23 880,28 900,24 L900,40 L0,40 Z" /></svg>
+    </div>
+
+    <section class="section section--souvenirs" id="souvenirs">
+      <div class="section__inner">
+        <p class="kicker hand">à toi de jouer</p>
+        <h2 class="section__title">Le mur des <span class="squiggle squiggle--sun">souvenirs</span></h2>
+        <p>Une photo d’époque, un souvenir qui fait rire, un petit mot doux… Dépose ici quelque chose pour Candice, ça restera accroché sur ce mur.&nbsp;💛</p>
+
+        <form class="souvenir-form" id="souvenirForm">
+          <label class="field">
+            <span class="field__label">Ton prénom</span>
+            <input type="text" name="name" id="fieldName" maxlength="60" required autocomplete="given-name" placeholder="Ex. : Tata Josiane" />
+          </label>
+          <label class="field">
+            <span class="field__label">Ton petit mot <em>(ou ton grand souvenir)</em></span>
+            <textarea name="message" id="fieldMessage" maxlength="1000" rows="4" placeholder="Raconte…"></textarea>
+          </label>
+          <div class="field">
+            <span class="field__label">Une photo <em>(optionnelle)</em></span>
+            <label class="field__file" id="fileLabel">
+              <input type="file" name="photo" id="fieldPhoto" accept="image/*" />
+              <span class="field__file-text" id="fileLabelText">📷&nbsp;&nbsp;Ajouter une photo</span>
+            </label>
+            <div class="field__preview" id="photoPreview" hidden>
+              <img id="photoPreviewImg" alt="Aperçu de ta photo" />
+              <button type="button" class="field__preview-remove" id="photoRemove" aria-label="Retirer la photo">✕</button>
+            </div>
+          </div>
+          <!-- pot de miel anti-robots : à laisser vide -->
+          <input type="text" name="website" id="fieldWebsite" tabindex="-1" autocomplete="off" aria-hidden="true" class="visually-hidden-field" />
+          <button type="submit" class="btn btn--submit" id="submitBtn">J’accroche mon souvenir&nbsp;✨</button>
+          <p class="souvenir-form__status" id="formStatus" role="status"></p>
+        </form>
+
+        <div class="gallery" id="gallery" aria-live="polite">
+          <p class="gallery__empty hand" id="galleryStatus">on accroche les premiers souvenirs…</p>
+        </div>
+      </div>
+    </section>
+  </main>
+
+  <footer class="footer">
+    <p class="hand">fait avec 💛 pour les 50 ans de Candice</p>
+  </footer>
+
+  <script src="js/config.js"></script>
+  <script src="js/main.js" defer></script>
+  <script type="module" src="js/souvenirs.js"></script>
+</body>
+</html>

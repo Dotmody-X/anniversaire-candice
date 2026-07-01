@@ -13,6 +13,10 @@ const previews = document.getElementById("photoPreviews");
 
 const MAX_PHOTOS = 10;
 
+/* La catégorie est encodée dans le chemin du fichier : photos/soiree-… ou photos/souvenir-…
+   (pas de colonne dédiée : le schéma SQL reste inchangé) */
+const catOf = (row) => (row.photo_path && row.photo_path.startsWith("photos/souvenir-") ? "souvenir" : "soiree");
+
 if (!cfg.SUPABASE_URL || !cfg.SUPABASE_ANON_KEY) {
   form.hidden = true;
   galleryStatus.textContent = "le mur des photos ouvre très bientôt…";
@@ -96,7 +100,8 @@ form.addEventListener("submit", async (e) => {
     for (let i = 0; i < selectedFiles.length; i++) {
       setStatus(`On accroche ta photo ${i + 1}/${selectedFiles.length}…`);
       const blob = await compressImage(selectedFiles[i]);
-      const photoPath = `photos/${Date.now()}-${Math.random().toString(36).slice(2, 8)}.jpg`;
+      const category = form.category.value === "souvenir" ? "souvenir" : "soiree";
+      const photoPath = `photos/${category}-${Date.now()}-${Math.random().toString(36).slice(2, 8)}.jpg`;
       const { error: upErr } = await supabase.storage
         .from(cfg.BUCKET)
         .upload(photoPath, blob, { contentType: "image/jpeg" });
@@ -111,9 +116,10 @@ form.addEventListener("submit", async (e) => {
       inserted.push(data);
     }
 
-    inserted.reverse().forEach((row) => gallery.prepend(buildCard(row)));
-    galleryStatus.hidden = true;
+    inserted.reverse().forEach((row) => gallery.prepend(buildCard(row, { eager: true })));
+    applyFilter();
     form.reset();
+    form.message.placeholder = PLACEHOLDERS.soiree;
     selectedFiles = [];
     renderPreviews();
     setStatus(inserted.length > 1 ? `${inserted.length} photos accrochées, merci ! 💛` : "C’est accroché, merci ! 💛", "success");
@@ -130,17 +136,25 @@ function publicUrl(path) {
   return supabase.storage.from(cfg.BUCKET).getPublicUrl(path).data.publicUrl;
 }
 
-function buildCard(row) {
+function buildCard(row, { eager = false } = {}) {
   const card = document.createElement("article");
   card.className = "card" + (row.photo_path ? "" : " card--note");
+  card.dataset.category = catOf(row);
 
   if (row.photo_path) {
     const img = document.createElement("img");
     img.className = "card__photo";
-    img.loading = "lazy";
+    // eager pour ses propres photos tout juste postées (on veut les voir apparaître direct)
+    img.loading = eager ? "eager" : "lazy";
     img.alt = `Photo de la soirée par ${row.name}`;
     img.src = publicUrl(row.photo_path);
     card.appendChild(img);
+  }
+  if (catOf(row) === "souvenir") {
+    const badge = document.createElement("p");
+    badge.className = "card__badge hand";
+    badge.textContent = "souvenir 💛";
+    card.appendChild(badge);
   }
   if (row.message) {
     const p = document.createElement("p");
@@ -173,14 +187,47 @@ async function loadGallery() {
     }
     return;
   }
-  if (!data.length) {
-    galleryStatus.textContent = "sois le premier ou la première à accrocher une photo de la soirée !";
-    return;
-  }
-  galleryStatus.hidden = true;
   const frag = document.createDocumentFragment();
   data.forEach((row) => frag.appendChild(buildCard(row)));
   gallery.appendChild(frag);
+  applyFilter();
 }
+
+/* ——— Filtres (tout / la soirée / souvenirs) ——— */
+const filterBar = document.getElementById("galleryFilter");
+let currentFilter = "all";
+
+const EMPTY_MSG = {
+  all: "sois le premier ou la première à accrocher une photo !",
+  soiree: "aucune photo de la soirée pour l’instant…",
+  souvenir: "aucun souvenir accroché pour l’instant…",
+};
+
+function applyFilter() {
+  let visible = 0;
+  gallery.querySelectorAll(".card").forEach((card) => {
+    const show = currentFilter === "all" || card.dataset.category === currentFilter;
+    card.hidden = !show;
+    if (show) visible++;
+  });
+  galleryStatus.hidden = visible > 0;
+  if (!visible) galleryStatus.textContent = EMPTY_MSG[currentFilter];
+}
+
+filterBar.addEventListener("click", (e) => {
+  const btn = e.target.closest(".gallery-filter__btn");
+  if (!btn) return;
+  currentFilter = btn.dataset.filter;
+  filterBar.querySelectorAll(".gallery-filter__btn").forEach((b) => b.classList.toggle("is-active", b === btn));
+  applyFilter();
+});
+
+/* Le placeholder de la légende suit la catégorie choisie */
+const PLACEHOLDERS = { soiree: "Ex. : le discours de minuit 😂", souvenir: "Ex. : l’été 98 en Ardèche 🌞" };
+Array.from(form.category).forEach((radio) =>
+  radio.addEventListener("change", () => {
+    form.message.placeholder = PLACEHOLDERS[form.category.value] || PLACEHOLDERS.soiree;
+  })
+);
 
 loadGallery();

@@ -443,6 +443,34 @@ body.illu-docked .hero-fixed { visibility: hidden; }
 }
 .field textarea { resize: vertical; min-height: 96px; }
 
+.field--choice { border: none; margin: 0; padding: 0; }
+.field--choice legend { padding: 0; margin-bottom: 7px; }
+
+.choice { display: flex; flex-wrap: wrap; gap: 10px; }
+.choice__chip input {
+  position: absolute;
+  width: 1px; height: 1px;
+  opacity: 0;
+}
+.choice__chip span {
+  display: inline-block;
+  padding: 10px 16px;
+  border-radius: 999px;
+  border: 2px solid var(--paper-deep);
+  background: var(--paper);
+  color: var(--ink-soft);
+  font-size: .95rem;
+  cursor: pointer;
+  transition: border-color .2s ease, background-color .2s ease, color .2s ease;
+}
+.choice__chip input:checked + span {
+  border-color: var(--sun);
+  background: rgba(242, 190, 78, 0.18);
+  color: var(--ink);
+  font-weight: 600;
+}
+.choice__chip input:focus-visible + span { outline: 2px solid var(--lake); outline-offset: 2px; }
+
 .field__file { display: block; cursor: pointer; }
 .field__file input { position: absolute; width: 1px; height: 1px; opacity: 0; }
 .field__file-text {
@@ -505,6 +533,37 @@ body.illu-docked .hero-fixed { visibility: hidden; }
 .souvenir-form__status.is-success { color: var(--sage); font-weight: 600; }
 
 /* ————— Galerie ————— */
+
+.gallery-filter {
+  display: flex;
+  justify-content: center;
+  gap: 10px;
+  margin-bottom: 20px;
+}
+.gallery-filter__btn {
+  font-family: "Reenie Beanie", cursive;
+  font-size: 1.5rem;
+  line-height: 1;
+  padding: 8px 16px 6px;
+  border: 2px solid transparent;
+  border-radius: 999px;
+  background: transparent;
+  color: var(--ink-soft);
+  cursor: pointer;
+  transition: color .2s ease, border-color .2s ease, background-color .2s ease;
+}
+.gallery-filter__btn.is-active {
+  color: var(--ink);
+  border-color: var(--coral);
+  background: rgba(226, 87, 76, 0.08);
+}
+
+.card__badge {
+  margin: 0 4px 2px;
+  font-size: 1.15rem;
+  line-height: 1;
+  color: var(--terracotta);
+}
 
 .gallery {
   columns: 2;

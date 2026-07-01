@@ -32,7 +32,7 @@
   <nav class="menu" id="menu" aria-hidden="true">
     <ul class="menu__list">
       <li style="--i:0"><a class="menu__link" href="#cagnotte">La cagnotte</a></li>
-      <li style="--i:1"><a class="menu__link" href="#souvenirs">Les photos de la soirée</a></li>
+      <li style="--i:1"><a class="menu__link" href="#souvenirs">Le mur des photos</a></li>
       <li style="--i:2">
         <a class="btn btn--cta menu__cta" href="https://tribee.fr/participations/472MZR52P78SYRA4M5X1WWDE6R" target="_blank" rel="noopener">
           Je participe&nbsp;🎁
@@ -90,13 +90,26 @@
 
     <section class="section section--souvenirs" id="souvenirs">
       <div class="section__inner">
-        <p class="kicker hand">tu as mitraillé ce soir ?</p>
-        <h2 class="section__title">Les photos de la <span class="squiggle squiggle--sun">soirée</span></h2>
-        <p>Dépose ici les photos que tu as prises pendant la soirée : elles resteront toutes accrochées sur ce mur, pour Candice et pour tout le monde.&nbsp;💛 Tu peux en envoyer plusieurs d’un coup&nbsp;!</p>
+        <p class="kicker hand">tu as mitraillé ce soir ? (ou en 1998 ?)</p>
+        <h2 class="section__title">Le mur des <span class="squiggle squiggle--sun">photos</span></h2>
+        <p>Les photos que tu as prises pendant la soirée, mais aussi tes photos souvenirs de Candice (ou avec elle&nbsp;!)&nbsp;: dépose tout ici, ça restera accroché sur ce mur.&nbsp;💛 Tu peux en envoyer plusieurs d’un coup&nbsp;!</p>
 
         <form class="souvenir-form" id="souvenirForm">
+          <fieldset class="field field--choice">
+            <legend class="field__label">C’est quoi comme photos&nbsp;?</legend>
+            <div class="choice">
+              <label class="choice__chip">
+                <input type="radio" name="category" value="soiree" checked />
+                <span>📸 De la soirée</span>
+              </label>
+              <label class="choice__chip">
+                <input type="radio" name="category" value="souvenir" />
+                <span>💛 Souvenir avec Candice</span>
+              </label>
+            </div>
+          </fieldset>
           <div class="field">
-            <span class="field__label">Tes photos de la soirée</span>
+            <span class="field__label">Tes photos</span>
             <label class="field__file" id="fileLabel">
               <input type="file" name="photo" id="fieldPhoto" accept="image/*" multiple />
               <span class="field__file-text" id="fileLabelText">📷&nbsp;&nbsp;Ajouter tes photos</span>
@@ -116,6 +129,12 @@
           <button type="submit" class="btn btn--submit" id="submitBtn">J’accroche mes photos&nbsp;✨</button>
           <p class="souvenir-form__status" id="formStatus" role="status"></p>
         </form>
+
+        <div class="gallery-filter" id="galleryFilter" role="group" aria-label="Filtrer les photos">
+          <button type="button" class="gallery-filter__btn is-active" data-filter="all">tout</button>
+          <button type="button" class="gallery-filter__btn" data-filter="soiree">la soirée</button>
+          <button type="button" class="gallery-filter__btn" data-filter="souvenir">souvenirs</button>
+        </div>
 
         <div class="gallery" id="gallery" aria-live="polite">
           <p class="gallery__empty hand" id="galleryStatus">on accroche les premières photos…</p>

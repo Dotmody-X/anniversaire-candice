@@ -1,4 +1,4 @@
-/* Le mur des souvenirs — dépôt et affichage via Supabase */
+/* Les photos de la soirée — dépôt et affichage via Supabase */
 import { createClient } from "https://esm.sh/@supabase/supabase-js@2";
 
 const cfg = window.CANDICE_CONFIG || {};
@@ -9,36 +9,53 @@ const status = document.getElementById("formStatus");
 const submitBtn = document.getElementById("submitBtn");
 const photoInput = document.getElementById("fieldPhoto");
 const fileLabelText = document.getElementById("fileLabelText");
-const preview = document.getElementById("photoPreview");
-const previewImg = document.getElementById("photoPreviewImg");
-const photoRemove = document.getElementById("photoRemove");
+const previews = document.getElementById("photoPreviews");
+
+const MAX_PHOTOS = 10;
 
 if (!cfg.SUPABASE_URL || !cfg.SUPABASE_ANON_KEY) {
   form.hidden = true;
-  galleryStatus.textContent = "le mur des souvenirs ouvre très bientôt…";
+  galleryStatus.textContent = "le mur des photos ouvre très bientôt…";
   throw new Error("Supabase non configuré (js/config.js)");
 }
 
 const supabase = createClient(cfg.SUPABASE_URL, cfg.SUPABASE_ANON_KEY);
 
-/* ——— Aperçu photo ——— */
-let selectedFile = null;
+/* ——— Sélection et aperçus (plusieurs photos possibles) ——— */
+let selectedFiles = [];
 
 photoInput.addEventListener("change", () => {
-  const file = photoInput.files && photoInput.files[0];
-  if (!file) return;
-  selectedFile = file;
-  previewImg.src = URL.createObjectURL(file);
-  preview.hidden = false;
-  fileLabelText.textContent = "📷  Changer de photo";
+  const incoming = Array.from(photoInput.files || []);
+  selectedFiles = selectedFiles.concat(incoming).slice(0, MAX_PHOTOS);
+  photoInput.value = ""; // permet de re-sélectionner les mêmes fichiers
+  renderPreviews();
 });
 
-photoRemove.addEventListener("click", () => {
-  selectedFile = null;
-  photoInput.value = "";
-  preview.hidden = true;
-  fileLabelText.textContent = "📷  Ajouter une photo";
-});
+function renderPreviews() {
+  previews.innerHTML = "";
+  selectedFiles.forEach((file, i) => {
+    const item = document.createElement("div");
+    item.className = "field__preview";
+    const img = document.createElement("img");
+    img.alt = `Aperçu photo ${i + 1}`;
+    img.src = URL.createObjectURL(file);
+    img.addEventListener("load", () => URL.revokeObjectURL(img.src));
+    const rm = document.createElement("button");
+    rm.type = "button";
+    rm.className = "field__preview-remove";
+    rm.setAttribute("aria-label", `Retirer la photo ${i + 1}`);
+    rm.textContent = "✕";
+    rm.addEventListener("click", () => {
+      selectedFiles.splice(i, 1);
+      renderPreviews();
+    });
+    item.append(img, rm);
+    previews.appendChild(item);
+  });
+  fileLabelText.textContent = selectedFiles.length
+    ? `📷  Ajouter d’autres photos (${selectedFiles.length}/${MAX_PHOTOS})`
+    : "📷  Ajouter tes photos";
+}
 
 /* ——— Compression côté client (max 1600px, JPEG) ——— */
 async function compressImage(file) {
@@ -66,35 +83,37 @@ form.addEventListener("submit", async (e) => {
 
   const name = form.name.value.trim();
   const message = form.message.value.trim();
-  if (!name) return setStatus("Dis-nous au moins ton prénom 🙂", "error");
-  if (!message && !selectedFile) return setStatus("Un petit mot ou une photo, il faut choisir au moins l’un des deux !", "error");
+  if (!selectedFiles.length) return setStatus("Ajoute au moins une photo de la soirée 📷", "error");
+  if (!name) return setStatus("Dis-nous qui a pris ces photos 🙂", "error");
 
   submitBtn.disabled = true;
-  setStatus("On accroche ton souvenir…");
 
   try {
-    let photoPath = null;
-    if (selectedFile) {
-      const blob = await compressImage(selectedFile);
-      photoPath = `photos/${Date.now()}-${Math.random().toString(36).slice(2, 8)}.jpg`;
+    const inserted = [];
+    for (let i = 0; i < selectedFiles.length; i++) {
+      setStatus(`On accroche ta photo ${i + 1}/${selectedFiles.length}…`);
+      const blob = await compressImage(selectedFiles[i]);
+      const photoPath = `photos/${Date.now()}-${Math.random().toString(36).slice(2, 8)}.jpg`;
       const { error: upErr } = await supabase.storage
         .from(cfg.BUCKET)
         .upload(photoPath, blob, { contentType: "image/jpeg" });
       if (upErr) throw upErr;
+
+      const { data, error } = await supabase
+        .from(cfg.TABLE)
+        .insert({ name, message: message || null, photo_path: photoPath })
+        .select()
+        .single();
+      if (error) throw error;
+      inserted.push(data);
     }
 
-    const { data, error } = await supabase
-      .from(cfg.TABLE)
-      .insert({ name, message: message || null, photo_path: photoPath })
-      .select()
-      .single();
-    if (error) throw error;
-
-    gallery.prepend(buildCard(data));
+    inserted.reverse().forEach((row) => gallery.prepend(buildCard(row)));
     galleryStatus.hidden = true;
     form.reset();
-    photoRemove.click();
-    setStatus("C’est accroché, merci ! 💛", "success");
+    selectedFiles = [];
+    renderPreviews();
+    setStatus(inserted.length > 1 ? `${inserted.length} photos accrochées, merci ! 💛` : "C’est accroché, merci ! 💛", "success");
   } catch (err) {
     console.error(err);
     setStatus("Oups, ça n’a pas marché… Réessaie dans un instant !", "error");
@@ -116,7 +135,7 @@ function buildCard(row) {
     const img = document.createElement("img");
     img.className = "card__photo";
     img.loading = "lazy";
-    img.alt = `Photo déposée par ${row.name}`;
+    img.alt = `Photo de la soirée par ${row.name}`;
     img.src = publicUrl(row.photo_path);
     card.appendChild(img);
   }
@@ -138,21 +157,21 @@ async function loadGallery() {
     .from(cfg.TABLE)
     .select("id, created_at, name, message, photo_path")
     .order("created_at", { ascending: false })
-    .limit(200);
+    .limit(300);
 
   if (error) {
     console.error(error);
     // table pas encore créée (schema.sql pas appliqué) : le mur "ouvre bientôt"
     if (error.code === "42P01" || error.code === "PGRST205") {
       form.hidden = true;
-      galleryStatus.textContent = "le mur des souvenirs ouvre très bientôt…";
+      galleryStatus.textContent = "le mur des photos ouvre très bientôt…";
     } else {
       galleryStatus.textContent = "impossible de charger le mur pour l’instant…";
     }
     return;
   }
   if (!data.length) {
-    galleryStatus.textContent = "sois le premier ou la première à accrocher un souvenir !";
+    galleryStatus.textContent = "sois le premier ou la première à accrocher une photo de la soirée !";
     return;
   }
   galleryStatus.hidden = true;

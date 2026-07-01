@@ -1,4 +1,4 @@
--- Mur des souvenirs — schéma appliqué au projet Supabase (org Truber, ref pjehsndnhrypnqcqyasn)
+-- Mur des photos de la soirée — schéma pour le projet Supabase (org Truber, ref pjehsndnhrypnqcqyasn)
 -- Table et bucket volontairement préfixés "candice" : isolés du reste du projet.
 
 create table if not exists public.candice_souvenirs (
@@ -6,8 +6,7 @@ create table if not exists public.candice_souvenirs (
   created_at timestamptz not null default now(),
   name text not null check (char_length(name) between 1 and 60),
   message text check (message is null or char_length(message) <= 1000),
-  photo_path text check (photo_path is null or photo_path like 'photos/%'),
-  check (message is not null or photo_path is not null)
+  photo_path text not null check (photo_path like 'photos/%')
 );
 
 alter table public.candice_souvenirs enable row level security;

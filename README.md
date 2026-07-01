@@ -1,7 +1,8 @@
 # Les 50 ans de Candice 🎉
 
 Site mobile-first pour l'anniversaire de Candice : lien vers la cagnotte Tribee
-(travaux du coin de paradis ardéchois) et mur des souvenirs (photos + petits mots).
+(travaux du coin de paradis ardéchois) et mur des photos de la soirée
+(les invités déposent leurs photos prises pendant la fête, avec légende optionnelle).
 
 ## Stack
 

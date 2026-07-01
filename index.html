@@ -32,7 +32,7 @@
   <nav class="menu" id="menu" aria-hidden="true">
     <ul class="menu__list">
       <li style="--i:0"><a class="menu__link" href="#cagnotte">La cagnotte</a></li>
-      <li style="--i:1"><a class="menu__link" href="#souvenirs">Le mur des souvenirs</a></li>
+      <li style="--i:1"><a class="menu__link" href="#souvenirs">Les photos de la soirée</a></li>
       <li style="--i:2">
         <a class="btn btn--cta menu__cta" href="https://tribee.fr/participations/472MZR52P78SYRA4M5X1WWDE6R" target="_blank" rel="noopener">
           Je participe&nbsp;🎁
@@ -90,38 +90,35 @@
 
     <section class="section section--souvenirs" id="souvenirs">
       <div class="section__inner">
-        <p class="kicker hand">à toi de jouer</p>
-        <h2 class="section__title">Le mur des <span class="squiggle squiggle--sun">souvenirs</span></h2>
-        <p>Une photo d’époque, un souvenir qui fait rire, un petit mot doux… Dépose ici quelque chose pour Candice, ça restera accroché sur ce mur.&nbsp;💛</p>
+        <p class="kicker hand">tu as mitraillé ce soir ?</p>
+        <h2 class="section__title">Les photos de la <span class="squiggle squiggle--sun">soirée</span></h2>
+        <p>Dépose ici les photos que tu as prises pendant la soirée : elles resteront toutes accrochées sur ce mur, pour Candice et pour tout le monde.&nbsp;💛 Tu peux en envoyer plusieurs d’un coup&nbsp;!</p>
 
         <form class="souvenir-form" id="souvenirForm">
+          <div class="field">
+            <span class="field__label">Tes photos de la soirée</span>
+            <label class="field__file" id="fileLabel">
+              <input type="file" name="photo" id="fieldPhoto" accept="image/*" multiple />
+              <span class="field__file-text" id="fileLabelText">📷&nbsp;&nbsp;Ajouter tes photos</span>
+            </label>
+            <div class="field__previews" id="photoPreviews"></div>
+          </div>
           <label class="field">
             <span class="field__label">Ton prénom</span>
             <input type="text" name="name" id="fieldName" maxlength="60" required autocomplete="given-name" placeholder="Ex. : Tata Josiane" />
           </label>
           <label class="field">
-            <span class="field__label">Ton petit mot <em>(ou ton grand souvenir)</em></span>
-            <textarea name="message" id="fieldMessage" maxlength="1000" rows="4" placeholder="Raconte…"></textarea>
+            <span class="field__label">Une légende <em>(optionnelle)</em></span>
+            <textarea name="message" id="fieldMessage" maxlength="1000" rows="2" placeholder="Ex. : le discours de minuit 😂"></textarea>
           </label>
-          <div class="field">
-            <span class="field__label">Une photo <em>(optionnelle)</em></span>
-            <label class="field__file" id="fileLabel">
-              <input type="file" name="photo" id="fieldPhoto" accept="image/*" />
-              <span class="field__file-text" id="fileLabelText">📷&nbsp;&nbsp;Ajouter une photo</span>
-            </label>
-            <div class="field__preview" id="photoPreview" hidden>
-              <img id="photoPreviewImg" alt="Aperçu de ta photo" />
-              <button type="button" class="field__preview-remove" id="photoRemove" aria-label="Retirer la photo">✕</button>
-            </div>
-          </div>
           <!-- pot de miel anti-robots : à laisser vide -->
           <input type="text" name="website" id="fieldWebsite" tabindex="-1" autocomplete="off" aria-hidden="true" class="visually-hidden-field" />
-          <button type="submit" class="btn btn--submit" id="submitBtn">J’accroche mon souvenir&nbsp;✨</button>
+          <button type="submit" class="btn btn--submit" id="submitBtn">J’accroche mes photos&nbsp;✨</button>
           <p class="souvenir-form__status" id="formStatus" role="status"></p>
         </form>
 
         <div class="gallery" id="gallery" aria-live="polite">
-          <p class="gallery__empty hand" id="galleryStatus">on accroche les premiers souvenirs…</p>
+          <p class="gallery__empty hand" id="galleryStatus">on accroche les premières photos…</p>
         </div>
       </div>
     </section>
